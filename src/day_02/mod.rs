@@ -43,7 +43,6 @@ pub mod solution {
       .for_each(|encrypted_match| {
         if match_dict.contains_key(*encrypted_match) {
           points += match_dict.get(*encrypted_match).unwrap();
-          println!("Current points: {points}");
         }
       }
     );
