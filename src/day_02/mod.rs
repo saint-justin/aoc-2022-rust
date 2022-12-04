@@ -1,6 +1,6 @@
 #[allow(unused)]
 pub mod solution {
-    use std::collections::HashMap;
+  use std::collections::HashMap;
 
   /// Day 2 Part 1 -- https://adventofcode.com/2022/day/2
   /// 

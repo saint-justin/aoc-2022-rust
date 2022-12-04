@@ -56,11 +56,13 @@ pub mod solutions {
     println!("Partially contained assignments: {contained_assignments}")
   }
 
+  /// Helper function to check if one assignment is completely contained within another
   fn check_full_containment(a1: &Assignment, a2: &Assignment) -> bool {
     if a1.start <= a2.start && a1.end >= a2.end { return true }
     return false
   }
 
+  /// Helper function to check if one assignment is partially contained within another
   fn check_partial_containment(a1: &Assignment, a2: &Assignment) -> bool {
     if a1.end < a2.start || a1.start > a2.end { return false } 
     return true

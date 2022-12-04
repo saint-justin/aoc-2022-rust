@@ -29,6 +29,7 @@ pub mod solutions {
   }
 
   /// Day 1 Part 2 -- https://adventofcode.com/2022/day/1#part2
+  /// 
   /// Same as above, but for the top 3 elves instead of just the firsts
   pub fn find_top_three_calorie_sum(elf_food_logs: &Vec<&str>) {
     let mut i: usize = 0;
