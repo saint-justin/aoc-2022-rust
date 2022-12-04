@@ -1,6 +1,11 @@
+#[allow(unused)]
 pub mod solutions {
 
-  // Day 1 Part 1 -- https://adventofcode.com/2022/day/1
+  /// Day 1 Part 1 -- https://adventofcode.com/2022/day/1
+  /// 
+  /// The input is a series of calorie counts, breaks in entries indicate
+  /// a new elf. Calculate which elf is carrying the most calories and
+  /// return that elf's carried calorie count.
   pub fn find_elf_carrying_most_calories(elf_food_logs: &Vec<&str>) {
     let mut i: usize = 0;
     let mut current_elf_calories: u32 = 0;
@@ -23,7 +28,8 @@ pub mod solutions {
     println!("Highest Calorie Count: {most_calories_so_far}");
   }
 
-  // Day 1 Part 2 -- https://adventofcode.com/2022/day/1#part2
+  /// Day 1 Part 2 -- https://adventofcode.com/2022/day/1#part2
+  /// Same as above, but for the top 3 elves instead of just the firsts
   pub fn find_top_three_calorie_sum(elf_food_logs: &Vec<&str>) {
     let mut i: usize = 0;
     let mut current_elf_calories: u32 = 0;
@@ -41,7 +47,7 @@ pub mod solutions {
         }
         current_elf_calories = 0;
       } 
-      // Otherwise just thicc en up the current elf
+      // Otherwise just thiccen up the current elf
       else {
         let item_calories: u32 = elf_food_logs[i].parse::<u32>().unwrap();
         current_elf_calories += item_calories;

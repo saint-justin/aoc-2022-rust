@@ -1,18 +1,23 @@
+#[allow(unused)]
 pub mod solution {
     use std::collections::HashMap;
 
-  /// Day 2 Part 1
-  /// https://adventofcode.com/2022/day/2
+  /// Day 2 Part 1 -- https://adventofcode.com/2022/day/2
   /// 
-  /// Part 1 input is 2 parts: (A/B/C) (X/Y/Z)
+  /// The input is a series of rock-paper-scissors games. The first half is
+  /// what the opponent will throw (rock/paper/scissors) and the second half
+  /// is what you should throw (r/p/s). You get an amount of points per each 
+  /// win/loss and a diff amount of points per what you choose to throw (r/p/s).
+  /// 
   /// OUTCOME:      THROWS:
   /// Lose     +0   Rock     +1
   /// Tie      +3   Paper    +2
   /// Win      +6   Scissors +3
-  ///
+  /// 
+  /// Calculate how many points you should end up with at the end tournament.
   pub fn calculate_total_score(encrypted_strategy_guide: &Vec<&str>) {
     let mut points = 0;
-    let match_dict = build_match_dictionary();
+    let match_dict = build_match_dict();
     encrypted_strategy_guide
       .iter()
       .for_each(|encrypted_match| {
@@ -28,13 +33,11 @@ pub mod solution {
     println!("Points gathered: {points}");
   }
 
-  /// Day 2 Part 1
-  /// https://adventofcode.com/2022/day/2
+  /// Day 2 Part 2 -- https://adventofcode.com/2022/day/2#part2
   /// 
-  /// Part 1 input is 2 parts: (A/B/C) (X/Y/Z)
-  /// A/B/C is what the opponent will throw (rock/paper/scissors)
-  /// X/Y/Z is what the outcome needs to be (lose/tie/win)
-  ///
+  /// Same basic pitch for the rock/paper/scissors tournament, but
+  /// instead of the 2nd input being what you should throw, it's instead
+  /// whether you should win/tie/lose the match.
   pub fn calculate_total_score_adjusted(encrypted_strategy_guide: &Vec<&str>) {
     let mut points = 0;
     let match_dict = build_decision_dict();
@@ -50,10 +53,8 @@ pub mod solution {
     println!("Points gathered: {points}");
   }
 
-  /// 0 -> lose
-  /// 1 -> tie
-  /// 2 -> win
-  fn build_match_dictionary() -> HashMap<String, i32> {
+  /// Helper function that builds the lookup table for Part 1
+  fn build_match_dict() -> HashMap<String, i32> {
     return HashMap::from([
       (String::from("A X"), 3), // R/R
       (String::from("A Y"), 6), // R/P
@@ -67,7 +68,7 @@ pub mod solution {
     ]);
   }
 
-  // Format: <InputKey, L/T/W + Points for Choice>
+  /// Helper function that builds the lookup table for Part 2
   fn build_decision_dict() -> HashMap<String, i32> {
     return HashMap::from([
       (String::from("A X"), 0 + 3), // Opponent throws R, to Lose throw -> S
@@ -82,6 +83,7 @@ pub mod solution {
     ]);
   }
 
+  /// Helper function that gives the amount of points for throwing rock/paper/scissors
   fn get_points_for_choice(choice: &str) -> i32 {
     match choice {
       "X" => return 1,
