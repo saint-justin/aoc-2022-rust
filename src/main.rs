@@ -4,14 +4,15 @@ mod day_01;
 mod day_02;
 mod day_03;
 mod day_04;
+mod day_05;
 
 fn main() {
-    let contents = fs::read_to_string("./src/day_04/input.txt")
+    let contents = fs::read_to_string("./src/day_05/input_test.txt")
       .expect("Should have been able to read the file");
 
     let puzzle_input: Vec<&str> = contents
       .split(['\n'])
-      .map(|e| e.trim())
+      // .map(|e| e.trim())
       .collect();
 
     // day_01::solutions::find_elf_carrying_most_calories(&puzzle_input);
@@ -21,5 +22,6 @@ fn main() {
     // day_03::solutions::find_priority_sum_of_dups(&puzzle_input);
     // day_03::solutions::find_priority_sum_of_team_badges(&puzzle_input);
     // day_04::solutions::find_fully_contained_assignments(&puzzle_input);
-    day_04::solutions::find_partially_contained_assignments(&puzzle_input);
+    // day_04::solutions::find_partially_contained_assignments(&puzzle_input);
+    day_05::solutions::find_rearrangement_message(&puzzle_input);
 }
