@@ -1,16 +1,15 @@
+#[allow(unused)]
 pub mod solutions {
+  /// Day 5 
   pub fn find_rearrangement_message(puzzle_input: &Vec<&str>) {
     let mut stacks = parse_initial_stacks(puzzle_input);
     let starting_index = calculate_stack_height(puzzle_input) + 2;
 
-    println!("Starting index: {}", puzzle_input[starting_index]);
     for instruction_index in starting_index..puzzle_input.len() {
       let instructions: Vec<&str> = puzzle_input[instruction_index]
         .trim()
         .split(' ')
         .collect();
-      println!("Instruction: {instructions:?}");
-      println!("Len:         {}", instructions.len());
       let amount = instructions[1].parse::<usize>().unwrap();
       let source = instructions[3].parse::<usize>().unwrap() - 1;
       let target = instructions[5].parse::<usize>().unwrap() - 1;
@@ -18,7 +17,30 @@ pub mod solutions {
         let data = stacks[source].pop().unwrap();
         stacks[target].push(data);
       }
-      println!("Stacks Updated: {:?}", stacks)
+    }
+
+    let mut secret_message = "".to_owned();
+    stacks.iter().for_each(|s| secret_message.push_str(s.last().unwrap()));
+
+    println!("Secret message decrypted: {secret_message}");
+
+  }
+
+  pub fn find_multimove_message(puzzle_input: &Vec<&str>) {
+    let mut stacks = parse_initial_stacks(puzzle_input);
+    let starting_index = calculate_stack_height(puzzle_input) + 2;
+
+    for instruction_index in starting_index..puzzle_input.len() {
+      let instructions: Vec<&str> = puzzle_input[instruction_index]
+        .trim()
+        .split(' ')
+        .collect();
+      let amount = instructions[1].parse::<usize>().unwrap();
+      let source = instructions[3].parse::<usize>().unwrap() - 1;
+      let target = instructions[5].parse::<usize>().unwrap() - 1;
+      let mut removed_items = vec!();
+      for _ in 0..amount { removed_items.push(stacks[source].pop().unwrap()) }
+      while removed_items.len() > 0 { stacks[target].push(removed_items.pop().unwrap()) }
     }
 
     let mut secret_message = "".to_owned();
@@ -47,7 +69,6 @@ pub mod solutions {
       }
     }
 
-    println!("Initial Stacks: {stacks:?}");
     return stacks;
   }
 

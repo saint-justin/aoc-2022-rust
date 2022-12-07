@@ -7,7 +7,7 @@ mod day_04;
 mod day_05;
 
 fn main() {
-    let contents = fs::read_to_string("./src/day_05/input_test.txt")
+    let contents = fs::read_to_string("./src/day_05/input.txt")
       .expect("Should have been able to read the file");
 
     let puzzle_input: Vec<&str> = contents
@@ -23,5 +23,6 @@ fn main() {
     // day_03::solutions::find_priority_sum_of_team_badges(&puzzle_input);
     // day_04::solutions::find_fully_contained_assignments(&puzzle_input);
     // day_04::solutions::find_partially_contained_assignments(&puzzle_input);
-    day_05::solutions::find_rearrangement_message(&puzzle_input);
+    // day_05::solutions::find_rearrangement_message(&puzzle_input);
+    day_05::solutions::find_multimove_message(&puzzle_input);
 }
