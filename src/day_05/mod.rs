@@ -1,6 +1,11 @@
 #[allow(unused)]
 pub mod solutions {
-  /// Day 5 
+  /// Day 5 Part 1 -- https://adventofcode.com/2022/day/5
+  /// 
+  /// Given an input that shows a set of cargo crates stack on eachother
+  /// along with a set of instructions to define which crates move where
+  /// one at a time, what characters end on the top of the crates at the
+  /// end of the instructions?
   pub fn find_rearrangement_message(puzzle_input: &Vec<&str>) {
     let mut stacks = parse_initial_stacks(puzzle_input);
     let starting_index = calculate_stack_height(puzzle_input) + 2;
@@ -26,6 +31,10 @@ pub mod solutions {
 
   }
 
+  /// Day 5 Part 2 -- https://adventofcode.com/2022/day/5#part2
+  /// 
+  /// Same input, same output, but the instructions move sets of crates
+  /// all at the same time instead of one at a time.
   pub fn find_multimove_message(puzzle_input: &Vec<&str>) {
     let mut stacks = parse_initial_stacks(puzzle_input);
     let starting_index = calculate_stack_height(puzzle_input) + 2;
