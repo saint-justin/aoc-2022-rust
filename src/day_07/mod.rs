@@ -57,7 +57,7 @@ pub mod solutions {
       match head {
         "$ cd" => {
           println!("{}: change dir to {}", head, command[2]);
-          current = Box::from(command[2].to_owned());
+          // current = Box::from(command[2].to_owned());
           continue;
         },
         "$ ls" =>  {
