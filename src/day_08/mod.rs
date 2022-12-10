@@ -1,3 +1,4 @@
+#[allow(unused)]
 pub mod solutions {
   #[derive(Debug, Clone, Copy)]
   struct Score(usize, usize, usize, usize);

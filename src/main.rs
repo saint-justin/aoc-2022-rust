@@ -8,9 +8,10 @@ mod day_05;
 mod day_06;
 mod day_07;
 mod day_08;
+mod day_09;
 
 fn main() {
-    let contents = fs::read_to_string("./src/day_08/input.txt")
+    let contents = fs::read_to_string("./src/day_09/input_test.txt")
       .expect("Should have been able to read the file");
 
     let puzzle_input: Vec<&str> = contents
@@ -31,7 +32,8 @@ fn main() {
     // day_06::solutions::characters_before_start_of_packet(&puzzle_input);
     // day_06::solutions::characters_before_start_of_packet_big(&puzzle_input);
     // day_08::solutions::get_visible_tree_count(&puzzle_input);
-    day_08::solutions::get_highest_scenic_score_tree(&puzzle_input);
+    // day_08::solutions::get_highest_scenic_score_tree(&puzzle_input);
+    day_09::solutions::find_tail_positions(&puzzle_input);
 
     // TODO: Day 07
     // day_07::solutions::find_sum_dirs_under_100000(&puzzle_input);
