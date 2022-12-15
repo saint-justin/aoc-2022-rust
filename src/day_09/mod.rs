@@ -70,7 +70,7 @@ pub mod solutions {
           let head = all_knots[i];
           let tail = all_knots[i + 1];
           let next_tail_pos = calculate_next_postion(&head, &tail, pos_diff);
-          pos_diff = &(next_tail_pos - tail);
+          // pos_diff = &(next_tail_pos - tail); // breaking builds for day 10
           
           all_knots[i + 1] = next_tail_pos;
         }
