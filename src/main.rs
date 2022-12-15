@@ -35,7 +35,8 @@ fn main() {
     // day_08::solutions::get_visible_tree_count(&puzzle_input);
     // day_08::solutions::get_highest_scenic_score_tree(&puzzle_input);
     // day_09::solutions::find_tail_positions(&puzzle_input);
-    day_10::solutions::sum_six_signal_strengths(&puzzle_input);
+    // day_10::solutions::sum_six_signal_strengths(&puzzle_input);
+    day_10::solutions::print_crt_display(&puzzle_input);
 
     // TODO: 
     // Day 7 All
