@@ -39,7 +39,6 @@ pub mod solutions {
       }
     }
 
-    println!("Important Cycle Strengths: {:?}", important_cycle_strengths);
     println!("Cycle strength sum: {}", important_cycle_strengths.iter().sum::<i64>())
   }
 
