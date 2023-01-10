@@ -1,5 +1,7 @@
 #[allow(unused)]
 pub mod solutions {
+  use std::time::{SystemTime, Duration};
+
   #[derive(Debug, Default, Clone, PartialEq)]
   enum Operation {
     #[default]
@@ -9,21 +11,26 @@ pub mod solutions {
     Addition,
   }
 
-  #[derive(Debug, Default, Clone, )] 
+  #[derive(Debug, Default, Clone)] 
   struct Monkey {
     items: Vec<usize>,
     operation: Operation,
-    operation_amount: usize, //usize::MAX means multiply by self
+    operation_amount: usize, // usize::MAX means multiply by self
     test_amount: usize,
     true_monkey_target: usize,
     false_monkey_target: usize, 
+    inspection_count: usize,
   }
 
   impl Monkey {
-    fn setItem(&mut self, item: usize) {
-      let mut new_items = Vec::from(&self.items);
+    fn add_item(&mut self, item: usize) {
+      let mut new_items = Vec::from(self.items.clone());
       new_items.push(item);
       self.items = new_items;
+    }
+
+    fn clear_items(&mut self) {
+      self.items.clear();
     }
   }
 
@@ -41,42 +48,73 @@ pub mod solutions {
   /// of the two most active monkeys over the duration.
   pub fn calculate_monkey_business(monkey_notes: &Vec<&str>) {
     let mut monkeys = parse_monkeys(monkey_notes);
-    println!("Monkeys parsed");
     for (i, monkey) in monkeys.iter().enumerate() { println!("Monkey {i}: {:?}", monkey) }
 
-    for i in 0..2 {
-      debug_monkeys(&monkeys, i);
-
-      let mut next_round_monkeys = monkeys.clone()
-        .iter()
-        .map(|monkey| { 
-          let mut new_monkey = monkey.clone();
-          new_monkey.items.clear();
-          return new_monkey;
-        })
-        .collect::<Vec<Monkey>>();
-
+    for _ in 0..20 {
       for i in 0..monkeys.len() {
-        for item in &monkeys[i].items {
-          println!("\nMonkey {i} inspected item {item}");
-          let (next_location, next_value) = get_next_item_location(*item, &monkeys[i]);
-          let mut updated_items = next_round_monkeys[next_location].items.clone();
-          updated_items.push(next_value);
-
-          monkeys[next_location].items = updated_items;
+        let mut item_set =  monkeys[i].items.clone();
+        monkeys[i].clear_items();
+        
+        while item_set.len() > 0 {
+          let current = item_set.pop().unwrap();
+          monkeys[i].inspection_count += 1;
+          let (next_location, next_value) = get_next_item_location(current, &monkeys[i], false);
+          monkeys[next_location].add_item(next_value);
         }
       }
-
     }
+
+    let specific_monkey_business = calculate_specific_monkey_business(&monkeys);
+    println!("Monkey business for top 2 apes: {specific_monkey_business}");
   }
+
+/// Part 2 is the same as part 1 except over the course of 10,000 cycles instead of 20
+// pub fn calculate_big_monkey_business(monkey_notes: &Vec<&str>) {
+//   let mut monkeys = parse_monkeys(monkey_notes);
+//   let start_timestamp = SystemTime::now();
+  
+//   for _ in 0..10 {
+//     for i in 0..monkeys.len() {
+//       let mut item_set =  monkeys[i].items.clone();
+//       monkeys[i].clear_items();
+      
+//       while item_set.len() > 0 {
+//         let current = item_set.pop().unwrap();
+//         monkeys[i].inspection_count += 1;
+//         let (next_location, next_value) = get_next_item_location(current, &monkeys[i], false);
+//         monkeys[next_location].add_item(next_value);
+//       }
+
+//       debug_monkeys(&monkeys, i);
+//     }
+//   }
+//   println!("Elapsed time: {:?}", start_timestamp.elapsed());
+
+//   let specific_monkey_business = calculate_specific_monkey_business(&monkeys);
+//   println!("Monkey business for top 2 apes: {specific_monkey_business}");
+// }
 
   fn debug_monkeys(monkeys: &Vec<Monkey>, round: usize) {
     println!("\n Round {round}: ");
     for (i, monkey) in  monkeys.clone().iter().enumerate() {
-      println!("Monkey {i}: {:?}", monkey.items);
+      println!("  Monkey {i}: {:?}", monkey.items);
     }
   }
 
+  fn calculate_specific_monkey_business(monkeys: &Vec<Monkey>) -> usize {
+    let mut inspection_counts: Vec<usize> = monkeys.iter()
+      .map(|m| m.inspection_count)
+      .collect::<Vec<usize>>();
+  
+    inspection_counts.sort();
+
+    return inspection_counts.iter()
+      .rev()
+      .take(2)
+      .product();
+  }
+
+  /// Pulls the tail word off a sentence by spaces
   fn get_last_word(s: &str) -> &str {
     s.split(" ")
       .collect::<Vec<&str>>()
@@ -84,35 +122,30 @@ pub mod solutions {
       .unwrap()
   }
 
-  // Returns a tuple of (monkey_location, item_value)
-  fn get_next_item_location(item: usize, monkey: &Monkey) -> (usize, usize) {
+  /// Returns a tuple of (monkey_location, item_value)
+  fn get_next_item_location(item: usize, monkey: &Monkey, anxiety_calms: bool) -> (usize, usize) {
     let mut new_item_value;
     match monkey.operation {
-      Operation::Addition => {
-        new_item_value = (item + monkey.operation_amount) / 3;
-        println!("Worry level increased by {}", monkey.operation_amount)
-      },
+      Operation::Addition => new_item_value = (item + monkey.operation_amount),
       Operation::Multiplication => {
-        if monkey.operation_amount == usize::MAX {
-          new_item_value = (item * item) / 3;
-          println!("Worry level increased by {} times", item)
-        } else {
-          new_item_value = (item * monkey.operation_amount) / 3;
-          println!("Worry level increased by {} times", monkey.operation_amount)
+        match monkey.operation_amount == usize::MAX { 
+          true => new_item_value = (item * item),
+          false =>  new_item_value = (item * monkey.operation_amount),
         }
       },
       _ => panic!("Illegal operation request for monkey: {:?}", monkey)
     }
 
-    if new_item_value % monkey.test_amount == 0 {
-      println!("Throwing to monkey {} with new value {}", monkey.true_monkey_target, new_item_value);
-      return (monkey.true_monkey_target, new_item_value)
-    } else {
-      println!("Throwing to monkey {} with new value {}", monkey.false_monkey_target, new_item_value);
-      return (monkey.false_monkey_target, new_item_value)
-    }
+    if anxiety_calms { new_item_value = new_item_value / 3; }
+    
+
+    match new_item_value % monkey.test_amount == 0 { 
+      true =>  return (monkey.true_monkey_target, new_item_value),
+      false => return (monkey.false_monkey_target, new_item_value),
+    } 
   }
 
+  /// Parses monkey data from input vec of strings into a vec of monkeys
   fn parse_monkeys(monkey_notes: &Vec<&str>) -> Vec<Monkey> {
     let mut monkey_number = 0;
     let mut monkeys: Vec<Monkey> = Vec::new();
@@ -127,14 +160,11 @@ pub mod solutions {
       }
 
       let split: Vec<&str> = line.trim().split(":").collect();
-
       let info_type = split[0];
+
+      if info_type.split(" ").collect::<Vec<&str>>()[0] == "Monkey" { continue; }
+
       let data = split[1].trim();
-
-      if info_type.split(" ").collect::<Vec<&str>>()[0] == "Monkey" {
-        continue;
-      }
-
       match info_type {
         "Starting items" => {
           monkey_template.items = data
@@ -142,7 +172,6 @@ pub mod solutions {
             .split(", ")
             .map(|n| n.parse::<usize>().unwrap())
             .collect::<Vec<usize>>();
-
         },
         "Operation" => {
           if data.contains("*") { monkey_template.operation = Operation::Multiplication }
@@ -153,15 +182,9 @@ pub mod solutions {
           if amount == "old" { monkey_template.operation_amount = usize::MAX }
           else {monkey_template.operation_amount = amount.parse::<usize>().unwrap() }
         },
-        "Test" => {
-          monkey_template.test_amount = get_last_word(data).parse::<usize>().unwrap();
-        },
-        "If true" => {
-          monkey_template.true_monkey_target = get_last_word(data).parse::<usize>().unwrap();
-        },
-        "If false" => {
-          monkey_template.false_monkey_target = get_last_word(data).parse::<usize>().unwrap();
-        },
+        "Test" => monkey_template.test_amount = get_last_word(data).parse::<usize>().unwrap(),
+        "If true" => monkey_template.true_monkey_target = get_last_word(data).parse::<usize>().unwrap(),
+        "If false" => monkey_template.false_monkey_target = get_last_word(data).parse::<usize>().unwrap(),
         _ => panic!("Unexpected input type: '{}'", data),
       }
     } 

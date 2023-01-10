@@ -14,7 +14,7 @@ mod day_11;
 mod day_12;
 
 fn main() {
-    let contents = fs::read_to_string("./src/day_11/input_test.txt")
+    let contents = fs::read_to_string("./src/day_11/input.txt")
       .expect("Should have been able to read the file");
 
     let puzzle_input: Vec<&str> = contents
@@ -39,7 +39,8 @@ fn main() {
     // day_09::solutions::find_tail_positions(&puzzle_input);
     // day_10::solutions::sum_six_signal_strengths(&puzzle_input);
     // day_10::solutions::print_crt_display(&puzzle_input);
-    day_11::solutions::calculate_monkey_business(&puzzle_input);
+    // day_11::solutions::calculate_monkey_business(&puzzle_input);
+    day_11::solutions::calculate_big_monkey_business(&puzzle_input);
     // day_12::solutions::find_shortest_path(&puzzle_input);
 
     // TODO: 
